@@ -65,7 +65,6 @@ func Detect(key string, text string, useHTTPS bool) DetectionLanguage {
 	resp := fetch(fullURL)
 	var myJSON DetectionLanguage
 	json.Unmarshal(resp, &myJSON)
-	fmt.Println(myJSON)
 	return myJSON
 }
 
@@ -74,13 +73,11 @@ func DetectMulti(key string, text []string, useHTTPS bool) DetectionLanguages {
 	serviceURL := getServiceURL(useHTTPS)
 	fullURL := serviceURL + fmt.Sprintf("detect?key=%s", key)
 	for _, t := range text {
-		escapedText := url.QueryEscape(t)
-		fullURL += "&q[]=" + escapedText
+		fullURL += "&q[]=" + url.QueryEscape(t)
 	}
 	resp := fetch(fullURL)
 	var myJSON DetectionLanguages
 	json.Unmarshal(resp, &myJSON)
-	fmt.Println(myJSON)
 	return myJSON
 }
 
@@ -112,7 +109,6 @@ func fetch(url string) []byte {
 	} else {
 		defer resp.Body.Close()
 		bytes, _ := ioutil.ReadAll(resp.Body)
-		fmt.Println(string(bytes))
 		return bytes
 	}
 	return []byte("")
